@@ -5,11 +5,11 @@ namespace :load do
 end
 
 namespace :deploy do
-  before :starting, :stop_websocket_server do
-    invoke 'websocket_rails:stop_server'
-  end
+  # before :starting, :stop_websocket_server do
+  #   invoke 'websocket_rails:stop_server'
+  # end
   after :publishing, :start_websocket_server do
-    invoke 'websocket_rails:start_server'
+    invoke 'websocket_rails:restart_server'
   end
 end
 
@@ -26,6 +26,14 @@ namespace :websocket_rails do
   task :stop_server do
     on roles(fetch(:websocket_rails_role)), in: :sequence, wait: 5 do
       within(current_path) { stop_server }
+    end
+  end
+
+  desc 'Restart websocket-rails server'
+  task :restart_server do
+    on roles(fetch(:websocket_rails_role)), in: :sequence, wait: 5 do
+      within(current_path) { stop_server }
+      within(release_path) { start_server }
     end
   end
 
