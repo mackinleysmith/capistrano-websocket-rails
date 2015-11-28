@@ -1,5 +1,5 @@
 namespace :load do
-  set :websocket_rails_pid, -> { current_path.join 'tmp', 'pids', 'websocket_rails.pid' }
+  set :websocket_rails_pid, -> { shared_path.join 'tmp', 'pids', 'websocket_rails.pid' }
   set :websocket_rails_env, -> { fetch :rack_env, fetch(:rails_env, fetch(:stage)) }
   set :websocket_rails_role, -> { :app }
 end
