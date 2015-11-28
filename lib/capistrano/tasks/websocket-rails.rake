@@ -25,9 +25,23 @@ namespace :websocket_rails do
 
   desc 'Stop websocket-rails server'
   task :stop_server do
-    on roles(fetch(:websocket_rails_role)) do
-      within(release_path) { stop_server fetch(:websocket_rails_pid) }
+    on roles(fetch(:websocket_rails_role)), in: :sequence, wait: 5 do
+      within current_path do
+        websocket_pid = current_path.join 'tmp', 'pids', 'websocket_rails.pid'
+        if test "[ -f #{websocket_pid} ]"
+          info 'Stopping websocket-rails server...'
+          with rails_env: fetch(:rails_env) do
+            rake 'websocket_rails:stop_server'
+          end
+          info 'Websocket-rails server stopped.'
+        else
+          info 'Websocket-rails server not running.'
+        end
+      end
     end
+    # on roles(fetch(:websocket_rails_role)) do
+    #   within(release_path) { stop_server fetch(:websocket_rails_pid) }
+    # end
   end
 
   desc 'Restart websocket-rails server'
