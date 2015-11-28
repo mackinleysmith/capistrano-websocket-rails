@@ -1,5 +1,5 @@
 namespace :load do
-  set :websocket_rails_pid, -> { shared_path.join 'tmp', 'pids', 'websocket_rails.pid' }
+  set :websocket_rails_pid, -> { File.join(shared_path, 'tmp', 'pids', 'websocket_rails.pid') }
   set :websocket_rails_env, -> { fetch :rack_env, fetch(:rails_env, fetch(:stage)) }
   set :websocket_rails_role, -> { :app }
 end
@@ -31,17 +31,13 @@ namespace :websocket_rails do
 
   def start_server
     info 'Starting websocket-rails server...'
-    with rails_env: fetch(:websocket_rails_env) do
-      rake 'websocket_rails:start_server'
-    end
+    run_rake_command! 'start_server'
     info 'Websocket-rails server started.'
   end
   def stop_server
     if pid_file_exists?
       info 'Stopping websocket-rails server...'
-      with rails_env: fetch(:websocket_rails_env) do
-        rake 'websocket_rails:stop_server'
-      end
+      run_rake_command! 'stop_server'
       info 'Websocket-rails server stopped.'
     else
       info 'Websocket-rails server not running.'
@@ -49,6 +45,11 @@ namespace :websocket_rails do
   end
   def pid_file_exists?
     test "[ -f #{fetch(:websocket_rails_pid)} ]"
+  end
+  def run_rake_command!(cmd)
+    with rails_env: fetch(:websocket_rails_env) do
+      rake "websocket_rails:#{cmd}"
+    end
   end
 
 end
