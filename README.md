@@ -1,41 +1,43 @@
-# Capistrano::Websocket::Rails
+# Capistrano::WebsocketRails
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capistrano/websocket/rails`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+WebsocketRails integration for Capistrano
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capistrano-websocket-rails'
+gem 'capistrano-websocket-rails', group: :development
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install capistrano-websocket-rails
-
 ## Usage
 
-TODO: Write usage instructions here
+Add the following to your Capfile.
 
-## Development
+```ruby
+    require 'capistrano/websocket-rails'
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Configurable options, shown here with defaults:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```ruby
+    :websocket_rails_pid => current_path.join('tmp', 'pids', 'websocket_rails.pid')
+    :websocket_rails_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
+    :websocket_rails_role => :app
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/capistrano-websocket-rails. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
-
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
