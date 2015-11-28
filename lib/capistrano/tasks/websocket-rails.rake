@@ -1,8 +1,5 @@
 namespace :load do
-  set :websocket_rails_pid, -> {
-    puts; puts; puts shared_path; puts; puts
-    puts; puts; puts File.join(shared_path, 'tmp', 'pids', 'websocket_rails.pid'); puts; puts
-    File.join(shared_path, 'tmp', 'pids', 'websocket_rails.pid') }
+  set :websocket_rails_pid, -> { shared_path.join 'tmp', 'pids', 'websocket_rails.pid' }
   set :websocket_rails_env, -> { fetch :rack_env, fetch(:rails_env, fetch(:stage)) }
   set :websocket_rails_role, -> { :app }
 end
@@ -35,8 +32,7 @@ namespace :websocket_rails do
   desc 'Restart websocket-rails server'
   task :restart_server do
     on roles(fetch(:websocket_rails_role)), in: :sequence, wait: 5 do
-      within(current_path) { stop_server }
-      within(release_path) { start_server }
+      within(release_path) { restart_server }
     end
   end
 
@@ -54,6 +50,7 @@ namespace :websocket_rails do
       info 'Websocket-rails server not running.'
     end
   end
+  def restart_server; stop_server; start_server end
   def pid_file_exists?
     test "[ -f #{fetch(:websocket_rails_pid)} ]"
   end
