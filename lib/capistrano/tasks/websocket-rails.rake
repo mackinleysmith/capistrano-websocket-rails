@@ -6,9 +6,9 @@ namespace :load do
 end
 
 namespace :deploy do
-  # before :starting, :check_websocket_rails_hooks do
-  #   invoke 'websocket_rails:add_default_hooks' if fetch(:websocket_rails_default_hooks)
-  # end
+  before :starting, :check_websocket_rails_hooks do
+    invoke 'websocket_rails:add_default_hooks' if fetch(:websocket_rails_default_hooks)
+  end
   after :publishing, :restart_websocket_rails_server do
     invoke 'websocket_rails:restart_server' if fetch(:websocket_rails_default_hooks)
   end
@@ -38,8 +38,8 @@ namespace :websocket_rails do
   end
 
   task :add_default_hooks do
-    after 'deploy:updated', 'websocket_rails:stop_server'
-    after 'deploy:reverted', 'websocket_rails:stop_server'
+    after 'deploy:updated',   'websocket_rails:stop_server'
+    after 'deploy:reverted',  'websocket_rails:stop_server'
     after 'deploy:published', 'websocket_rails:start_server'
   end
 
