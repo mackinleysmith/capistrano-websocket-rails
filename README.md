@@ -19,15 +19,16 @@ And then execute:
 Add the following to your Capfile.
 
 ```ruby
-    require 'capistrano/websocket-rails'
+require 'capistrano/websocket-rails'
 ```
 
 Configurable options, shown here with defaults:
 
 ```ruby
-    :websocket_rails_pid => current_path.join('tmp', 'pids', 'websocket_rails.pid')
-    :websocket_rails_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
-    :websocket_rails_role => :app
+  :websocket_rails_default_hooks => true
+  :websocket_rails_pid => shared_path.join('tmp', 'pids', 'websocket_rails.pid')
+  :websocket_rails_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
+  :websocket_rails_role => :app
 ```
 
 ## Contributing
