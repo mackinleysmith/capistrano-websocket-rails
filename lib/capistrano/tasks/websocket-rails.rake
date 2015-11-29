@@ -9,9 +9,9 @@ namespace :deploy do
   before :starting, :check_websocket_rails_hooks do
     invoke 'websocket_rails:add_default_hooks' if fetch(:websocket_rails_default_hooks)
   end
-  after :publishing, :restart_websocket_rails_server do
-    invoke 'websocket_rails:restart_server' if fetch(:websocket_rails_default_hooks)
-  end
+  # after :publishing, :restart_websocket_rails_server do
+  #   invoke 'websocket_rails:restart_server' if fetch(:websocket_rails_default_hooks)
+  # end
 end
 
 namespace :websocket_rails do
@@ -46,9 +46,11 @@ namespace :websocket_rails do
 
   desc 'Restart websocket-rails server'
   task :restart_server do
-    on roles(fetch(:websocket_rails_role)) do
-      within(release_path) { restart_server fetch(:websocket_rails_pid) }
-    end
+    invoke 'websocket_rails:stop_server'
+    invoke 'websocket_rails:start_server'
+    # on roles(fetch(:websocket_rails_role)) do
+    #   within(release_path) { restart_server fetch(:websocket_rails_pid) }
+    # end
   end
 
   task :add_default_hooks do
